@@ -1,4 +1,4 @@
 package com.example.topshows.ui.about
 
-class AboutActivity {
+fun About() {
 }

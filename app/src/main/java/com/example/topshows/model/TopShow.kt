@@ -1,7 +1,11 @@
 package com.example.topshows.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
 data class TopShow(
-    val id: Int,
+    @PrimaryKey val id: Int,
     val vote_count: Int,
     val popularity: Float,
     val vote_average: Float,

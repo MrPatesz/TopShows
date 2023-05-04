@@ -1,5 +1,6 @@
 package com.example.topshows.di
 
+import com.example.topshows.network.ShowService
 import com.example.topshows.persistence.TopShowDao
 import com.example.topshows.ui.main.MainRepository
 import dagger.Module
@@ -14,9 +15,9 @@ object RepositoryModule {
     @Provides
     @ViewModelScoped
     fun provideMainRepository(
-        // topShowService: ShowService,
+        showService: ShowService,
         topShowDao: TopShowDao
     ): MainRepository {
-        return MainRepository(/*topShowService, topShowDao*/)
+        return MainRepository(showService, topShowDao)
     }
 }

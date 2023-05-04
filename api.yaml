@@ -1,0 +1,339 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: TopShows
+host: api.themoviedb.org
+basePath: /3
+consumes:
+  - application/json
+produces:
+  - application/json
+tags:
+  - name: TV
+paths:
+  '/tv/top_rated':
+    get:
+      tags:
+        - TV
+      operationId: getTopShows
+      parameters:
+        - name: api_key
+          in: query
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/TopShowsResponse'
+  '/tv/{tv_id}':
+    get:
+      tags:
+        - TV
+      operationId: getShow
+      parameters:
+        - name: tv_id
+          in: path
+          required: true
+          type: integer
+        - name: api_key
+          in: query
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/ShowDetails'
+  '/tv/{tv_id}/delete':
+    delete:
+      tags:
+        - TV
+      operationId: deleteShow
+      parameters:
+        - name: tv_id
+          in: path
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+  '/tv/{tv_id}/put':
+    put:
+      tags:
+        - TV
+      operationId: putShow
+      parameters:
+        - name: tv_id
+          in: path
+          required: true
+          type: integer
+        - name: data
+          in: body
+          required: false
+          schema:
+            "$ref": "#/definitions/ShowDetails"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            "$ref": "#/definitions/ShowDetails"
+  "/tv/post":
+    post:
+      tags:
+        - TV
+      operationId: postShow
+      parameters:
+        - name: data
+          in: body
+          required: false
+          schema:
+            "$ref": "#/definitions/ShowDetails"
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            "$ref": "#/definitions/ShowDetails"
+
+definitions:
+  TopShowsResponse:
+    type: object
+    properties:
+      page:
+        type: integer
+      results:
+        type: array
+        items:
+          $ref: '#/definitions/TopShow'
+      total_results:
+        type: integer
+      total_pages:
+        type: integer
+
+  TopShow:
+    type: object
+    properties:
+      poster_path:
+        type: string
+      overview:
+        type: string
+      first_air_date:
+        type: string
+      genre_ids:
+        type: array
+        items:
+          type: integer
+      id:
+        type: integer
+      original_name:
+        type: string
+      original_language:
+        type: string
+      name:
+        type: string
+      backdrop_path:
+        type: string
+      popularity:
+        type: number
+        format: float
+      vote_count:
+        type: integer
+      vote_average:
+        type: number
+        format: float
+      video:
+        type: array
+        items:
+          type: string
+
+  ShowDetails:
+    type: object
+    properties:
+      backdrop_path:
+        type: string
+      genres:
+        type: array
+        items:
+          $ref: '#/definitions/Genre'
+      homepage:
+        type: string
+      id:
+        type: integer
+      original_language:
+        type: string
+      original_name:
+        type: string
+      overview:
+        type: string
+      popularity:
+        type: number
+        format: float
+      poster_path:
+        type: string
+      production_companies:
+        type: array
+        items:
+          $ref: '#/definitions/ProductionCompany'
+      production_countries:
+        type: array
+        items:
+          $ref: '#/definitions/ProductionCountry'
+      first_air_date:
+        type: string
+      last_air_date:
+        type: string
+      spoken_languages:
+        type: array
+        items:
+          $ref: '#/definitions/SpokenLanguage'
+      status:
+        type: string
+      tagline:
+        type: string
+      name:
+        type: string
+      vote_average:
+        type: number
+        format: float
+      vote_count:
+        type: integer
+      created_by:
+        type: array
+        items:
+          $ref: '#/definitions/CreatedBy'
+      networks:
+        type: array
+        items:
+          $ref: '#/definitions/Network'
+      seasons:
+        type: array
+        items:
+          $ref: '#/definitions/Season'
+      episode_run_time:
+        type: array
+        items:
+          type: integer
+      type:
+        type: string
+      number_of_episodes:
+        type: integer
+      number_of_seasons:
+        type: integer
+      in_production:
+        type: boolean
+      languages:
+        type: array
+        items:
+          type: string
+      origin_country:
+        type: array
+        items:
+          type: string
+      last_episode_to_air:
+        type: object
+        items:
+          $ref: '#/definitions/LastEpisodeToAir'
+
+  Genre:
+    type: object
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+
+  ProductionCompany:
+    type: object
+    properties:
+      name:
+        type: string
+      id:
+        type: integer
+      logo_path:
+        type: string
+      origin_country:
+        type: string
+
+  ProductionCountry:
+    type: object
+    properties:
+      iso_3166_1:
+        type: string
+      name:
+        type: string
+
+  SpokenLanguage:
+    type: object
+    properties:
+      iso_639_1:
+        type: string
+      name:
+        type: string
+      english_name:
+        type: string
+
+  CreatedBy:
+    type: object
+    properties:
+      id:
+        type: integer
+      credit_id:
+        type: string
+      gender:
+        type: integer
+      name:
+        type: string
+      profile_path:
+        type: string
+  Network:
+    type: object
+    properties:
+      id:
+        type: integer
+      logo_path:
+        type: string
+      name:
+        type: string
+      origin_country:
+        type: string
+  Season:
+    type: object
+    properties:
+      id:
+        type: integer
+      air_date:
+        type: string
+      episode_count:
+        type: integer
+      name:
+        type: string
+      overview:
+        type: string
+      poster_path:
+        type: string
+      season_number:
+        type: integer
+  LastEpisodeToAir:
+    type: object
+    properties:
+      id:
+        type: integer
+      air_date:
+        type: string
+      episode_number:
+        type: integer
+      name:
+        type: string
+      overview:
+        type: string
+      production_code:
+        type: string
+      still_path:
+        type: string
+      season_number:
+        type: integer
+      vote_average:
+        type: number
+        format: float
+      vote_count:
+        type: integer

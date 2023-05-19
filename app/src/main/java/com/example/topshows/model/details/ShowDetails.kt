@@ -11,5 +11,6 @@ data class ShowDetails (
     val number_of_seasons: Int,
     val overview: String,
     val backdrop_path: String?,
+    val poster_path: String?,
     val seasons: Array<Season>,
 )

@@ -18,8 +18,8 @@ interface ShowService {
 
     @GET("tv/{tv_id}")
     suspend fun getShow(
-        @Query("api_key") apiKey: String,
-        @Path("tv_id") tvId: Int
+        @Path("tv_id") tvId: Int,
+        @Query("api_key") apiKey: String
     ): ApiResponse<ShowDetails>
 
     @DELETE("tv/{tv_id}/delete")

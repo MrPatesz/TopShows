@@ -49,7 +49,7 @@ fun ShowsTopAppBar(
                 if(hasBackArrow) {
                     IconButton(
                         onClick = { pressOnBack() },
-                        modifier = Modifier.padding(top = 4.dp),
+                        modifier = Modifier.padding(top = 6.dp),
                     ) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,

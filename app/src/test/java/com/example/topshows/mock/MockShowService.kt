@@ -3,26 +3,26 @@ package com.example.topshows.mock
 import com.example.topshows.model.TopShowsResponse
 import com.example.topshows.model.details.ShowDetails
 import com.example.topshows.network.ShowService
-import retrofit2.Call
+import com.skydoves.sandwich.ApiResponse
 
 class MockShowService : ShowService {
-    override fun getTopShows(apiKey: String): Call<TopShowsResponse> {
+    override suspend fun getTopShows(apiKey: String): ApiResponse<TopShowsResponse> {
         TODO("Not yet implemented")
     }
 
-    override fun getShow(apiKey: String, tvId: Int): Call<ShowDetails> {
+    override suspend fun getShow(tvId: Int, apiKey: String): ApiResponse<ShowDetails> {
         TODO("Not yet implemented")
     }
 
-    override fun deleteShow(tvId: Int): Call<Void> {
+    override fun deleteShow(tvId: Int): ApiResponse<Void> {
         TODO("Not yet implemented")
     }
 
-    override fun postShow(data: ShowDetails): Call<ShowDetails> {
+    override fun postShow(data: ShowDetails): ApiResponse<ShowDetails> {
         TODO("Not yet implemented")
     }
 
-    override fun putShow(tvId: Int, data: ShowDetails): Call<ShowDetails> {
+    override fun putShow(tvId: Int, data: ShowDetails): ApiResponse<ShowDetails> {
         TODO("Not yet implemented")
     }
 }

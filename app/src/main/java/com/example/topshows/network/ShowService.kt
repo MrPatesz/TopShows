@@ -2,7 +2,7 @@ package com.example.topshows.network
 
 import com.example.topshows.model.TopShowsResponse
 import com.example.topshows.model.details.ShowDetails
-import retrofit2.Call
+import com.skydoves.sandwich.ApiResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -14,23 +14,23 @@ import retrofit2.http.Query
 interface ShowService {
 
     @GET("tv/top_rated")
-    fun getTopShows(@Query("api_key") apiKey: String): Call<TopShowsResponse>
+    suspend fun getTopShows(@Query("api_key") apiKey: String): ApiResponse<TopShowsResponse>
 
     @GET("tv/{tv_id}")
-    fun getShow(
-        @Query("api_key") apiKey: String,
-        @Path("tv_id") tvId: Int
-    ): Call<ShowDetails>
+    suspend fun getShow(
+        @Path("tv_id") tvId: Int,
+        @Query("api_key") apiKey: String
+    ): ApiResponse<ShowDetails>
 
     @DELETE("tv/{tv_id}/delete")
-    fun deleteShow(@Path("tv_id") tvId: Int): Call<Void>
+    fun deleteShow(@Path("tv_id") tvId: Int): ApiResponse<Void>
 
     @POST("tv/post")
-    fun postShow(@Body data: ShowDetails): Call<ShowDetails>
+    fun postShow(@Body data: ShowDetails): ApiResponse<ShowDetails>
 
     @PUT("tv/{tv_id}/put")
     fun putShow(
         @Path("tv_id") tvId: Int,
         @Body data: ShowDetails
-    ): Call<ShowDetails>
+    ): ApiResponse<ShowDetails>
 }

@@ -8,17 +8,13 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -33,6 +29,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.topshows.model.details.Season
 import com.example.topshows.model.details.ShowDetails
 import com.example.topshows.utils.NetworkImage
+import com.example.topshows.utils.ShowsTopAppBar
 
 @Composable
 fun ShowDetails(
@@ -45,44 +42,40 @@ fun ShowDetails(
         viewModel.loadShowById(showId)
     }
 
-    val details: ShowDetails? by viewModel.showDetailsFlow.collectAsState(initial = null)
-    details?.let { showDetails ->
-        PosterDetailsBody(showDetails, pressOnBack, goToAboutScreen)
+    Scaffold(
+        backgroundColor = Color.Gray,
+        topBar = { ShowsTopAppBar(
+            goToAboutScreen = { goToAboutScreen() },
+            hasBackArrow = true,
+            pressOnBack = { pressOnBack() }
+        ) },
+    ) { innerPadding ->
+        val modifier = Modifier.padding(innerPadding)
+
+        val details: ShowDetails? by viewModel.showDetailsFlow.collectAsState(initial = null)
+        details?.let { showDetails ->
+            ShowDetailsBody(modifier, showDetails)
+        }
     }
 }
 
 @Composable
-private fun PosterDetailsBody(
+private fun ShowDetailsBody(
+    modifier: Modifier = Modifier,
     showDetails: ShowDetails,
-    pressOnBack: () -> Unit,
-    goToAboutScreen: () -> Unit = {}, // TODO TopAppBar
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxHeight()
             .verticalScroll(rememberScrollState())
             .background(Color.Gray)
     ) {
         ConstraintLayout(modifier = Modifier.fillMaxHeight()) {
-            val (arrow, details, backdrop, overviewTitle, overview, seasonsTitle, seasons) = createRefs()
-
-            showDetails.backdrop_path?.let {
-                NetworkImage(
-                    url = it,
-                    modifier = Modifier
-                        .constrainAs(backdrop) {
-                            top.linkTo(parent.top)
-                        }
-                        .fillMaxWidth()
-                        .aspectRatio(1.78f),
-                    circularRevealEnabled = true,
-                    size = "w780"
-                )
-            }
+            val (details, backdrop, overviewTitle, overview, seasonsTitle, seasons) = createRefs()
 
             Row(modifier = Modifier
                 .constrainAs(details) {
-                    top.linkTo(backdrop.bottom)
+                    top.linkTo(parent.top)
                 }
             ) {
                 showDetails.poster_path?.let {
@@ -146,8 +139,23 @@ private fun PosterDetailsBody(
                     .constrainAs(overview) {
                         top.linkTo(overviewTitle.bottom)
                     }
-                    .padding(8.dp)
+                    .padding(8.dp, bottom = 4.dp)
             )
+
+            showDetails.backdrop_path?.let {
+                NetworkImage(
+                    url = it,
+                    modifier = Modifier
+                        .constrainAs(backdrop) {
+                            top.linkTo(overview.bottom)
+                        }
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                        .aspectRatio(1.78f),
+                    circularRevealEnabled = true,
+                    size = "w780"
+                )
+            }
 
             Text(
                 text = "Seasons",
@@ -156,7 +164,7 @@ private fun PosterDetailsBody(
                 modifier = Modifier
                     .padding(8.dp)
                     .constrainAs(seasonsTitle) {
-                        top.linkTo(overview.bottom)
+                        top.linkTo(backdrop.bottom)
                     }
             )
 
@@ -166,22 +174,9 @@ private fun PosterDetailsBody(
                 .constrainAs(seasons) {
                     top.linkTo(seasonsTitle.bottom)
                     bottom.linkTo(parent.bottom)
-                })
-
-            IconButton(onClick = { pressOnBack() }) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    tint = Color.White,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .constrainAs(arrow) {
-                            top.linkTo(parent.top)
-                        }
-                        .padding(12.dp)
-                        .statusBarsPadding()
-                    // .background(color = Color.LightGray, shape = RoundedCornerShape(8.dp))
-                )
-            }
+                }
+                    .padding(bottom=20.dp)
+            )
         }
     }
 }
@@ -206,7 +201,7 @@ private fun SeasonItem(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .padding(4.dp),
+            .padding(vertical = 4.dp, horizontal = 8.dp),
         color = Color.LightGray,
         elevation = 8.dp,
         shape = RoundedCornerShape(8.dp)

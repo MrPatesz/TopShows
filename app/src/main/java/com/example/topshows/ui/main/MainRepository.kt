@@ -5,6 +5,7 @@ import com.example.topshows.model.TopShow
 import com.example.topshows.network.NetworkConfig
 import com.example.topshows.network.ShowService
 import com.example.topshows.persistence.TopShowDao
+import com.skydoves.sandwich.suspendOnFailure
 import com.skydoves.sandwich.suspendOnSuccess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
@@ -22,16 +23,15 @@ class MainRepository @Inject constructor(
         onStart: () -> Unit,
         onCompletion: () -> Unit,
     ) = flow {
-        val topShows: List<TopShow> = topShowDao.getTopShows()
-        if (true) { // TODO topShows.isEmpty()) {
-            showService.getTopShows(NetworkConfig.API_KEY)
-                .suspendOnSuccess {
-                    val resultTopShows = data.results.asList()
-                    topShowDao.insertTopShows(resultTopShows)
-                    emit(resultTopShows)
-                }
-        } else {
-            emit(topShows)
-        }
+        showService.getTopShows(NetworkConfig.API_KEY)
+            .suspendOnSuccess {
+                val resultTopShows = data.results.asList()
+                topShowDao.insertTopShows(resultTopShows)
+                emit(resultTopShows)
+            }
+            .suspendOnFailure {
+                val topShows: List<TopShow> = topShowDao.getTopShows()
+                emit(topShows.sortedByDescending { it.vote_average })
+            }
     }.onStart { onStart() }.onCompletion { onCompletion() }.flowOn(Dispatchers.IO)
 }

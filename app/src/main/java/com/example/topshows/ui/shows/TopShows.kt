@@ -33,7 +33,7 @@ fun TopShows(
             },
         ) { innerPadding ->
             val modifier = Modifier.padding(innerPadding)
-            TopShowsList(modifier.padding(bottom=30.dp), topShows, selectShow)
+            TopShowsList(modifier.padding(bottom=24.dp), topShows, selectShow)
         }
         if (isLoading) {
             CircularProgressIndicator(

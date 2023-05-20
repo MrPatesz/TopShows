@@ -175,7 +175,7 @@ private fun ShowDetailsBody(
                     top.linkTo(seasonsTitle.bottom)
                     bottom.linkTo(parent.bottom)
                 }
-                    .padding(bottom=20.dp)
+                    .padding(bottom=30.dp)
             )
         }
     }
